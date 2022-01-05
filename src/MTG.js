@@ -1,40 +1,27 @@
 import React, { Component } from "react";
-import Card from "./card";
-
-const ColorInput = (props) => {
-  return (
-    <>
-      <input type="text" value={props.value} onChange={props.change} />
-    </>
-  );
-};
-
-const NameInput = (props) => {
-  return (
-    <>
-      <input type="text" value={props.value} onChange={props.change} />
-    </>
-  );
-};
+import { Cards } from "./components/searchFilters/cards";
+import { CardType } from "./components/searchFilters/cardType";
+import { Colors } from "./components/searchFilters/colors";
+import { FormatType } from "./components/searchFilters/formatType";
+import { NameInput } from "./components/searchFilters/nameInput";
+import { Stuff } from "./props";
 
 class MTG extends Component {
-  static defaultProps = {
-    baseUrl: "https://api.magicthegathering.io/v1/cards?contains=imageUrl",
-  };
   constructor(props) {
     super(props);
     this.state = {
-      baseUrl: this.props.baseUrl,
+      baseUrl: Stuff.baseUrl,
       cards: [],
       pageNumber: 1,
       buttonDisabled: false,
-      colors: "",
+      colorsBool: new Array(Stuff.colorChoices.length).fill(false),
+      raritiesBool: new Array(Stuff.rarityChoices.length).fill(false),
+      cardType: " ",
+      formatType: " ",
       name: "",
+      orderBy: "name",
+      orderType: "asc",
     };
-  }
-
-  componentDidMount() {
-    this.loadCards();
   }
 
   loadCards = async () => {
@@ -43,6 +30,11 @@ class MTG extends Component {
     );
     const data = await response.json();
     this.setState({ cards: data.cards });
+    setTimeout(() => {
+      console.log(`from load function ${this.state.baseUrl}`);
+      console.log(this.state.cards, data);
+      this.setState({ buttonDisabled: false });
+    }, 200);
   };
 
   prevPage = () => {
@@ -52,7 +44,6 @@ class MTG extends Component {
     });
     setTimeout(() => {
       this.loadCards();
-      this.setState({ buttonDisabled: false });
       console.log(this.state.pageNumber);
     }, 500);
   };
@@ -64,35 +55,82 @@ class MTG extends Component {
     });
     setTimeout(() => {
       this.loadCards();
-      this.setState({ buttonDisabled: false });
       console.log(this.state.pageNumber);
     }, 500);
   };
 
+  handleOnColorChange = (index) => {
+    let newVals = [...this.state.colorsBool];
+    newVals[index] = !this.state.colorsBool[index];
+    this.setState({ colorsBool: newVals });
+  };
+
+  handleOnCardChange = (e) => {
+    this.setState({ cardType: e.target.value });
+    setTimeout(() => {
+      console.log(this.state.cardType);
+    }, 200);
+  };
+
+  handleOnFormatChange = (e) => {
+    this.setState({ formatType: e.target.value });
+    setTimeout(() => {
+      console.log(this.state.formatType);
+    }, 200);
+  };
+
   search = () => {
-    if (this.state.colors.length !== 0) {
-      this.setState({
-        baseUrl: this.state.baseUrl + `&colors=${this.state.colors}`,
+    this.setState({ buttonDisabled: true, baseUrl: Stuff.baseUrl });
+    setTimeout(() => {
+      const colorsArray = Stuff.colorChoices.filter((color, index) => {
+        return this.state.colorsBool[index] === true ? color : null;
       });
-    }
-    if (this.state.name.length !== 0) {
-      this.setState({
-        baseUrl: this.state.baseUrl + `&name=${this.state.name}`,
-      });
-    }
+      if (colorsArray.length !== 0) {
+        let colorsString = `&colors=${colorsArray.toString()}`;
+        this.setState({
+          baseUrl: this.state.baseUrl + colorsString,
+        });
+      }
+      if (this.state.name.length !== 0) {
+        let queryName = `&name=${this.state.name.split(" ").join("+")}`;
+        this.setState({
+          baseUrl: this.state.baseUrl + queryName,
+        });
+      }
+      if (this.state.cardType !== " ") {
+        let queryCardType = `&types=${this.state.cardType}`;
+        this.setState({
+          baseUrl: this.state.baseUrl + queryCardType,
+        });
+      }
+      if (this.state.formatType !== " ") {
+        let queryFormatType = `&gameFormat=${this.state.formatType}`;
+        this.setState({
+          baseUrl: this.state.baseUrl + queryFormatType,
+        });
+      }
+    }, 200);
+    setTimeout(() => {
+      this.loadCards();
+      console.log(`from search function ${this.state.baseUrl}`);
+    }, 700);
   };
 
   render() {
     return (
-      <div>
-        <ColorInput
-          value={this.state.colors}
-          change={(e) => {
-            this.setState({
-              colors: e.target.value,
-              pageNumber: 1,
-            });
-          }}
+      <div style={main}>
+        <div>
+          <button onClick={this.prevPage} disabled={this.state.buttonDisabled}>
+            prev
+          </button>
+          <button onClick={this.nextPage} disabled={this.state.buttonDisabled}>
+            next
+          </button>
+        </div>
+        <Colors
+          colorChoices={Stuff.colorChoices}
+          colorsBool={this.state.colorsBool}
+          handleOnChange={this.handleOnColorChange}
         />
         <NameInput
           value={this.state.name}
@@ -103,20 +141,37 @@ class MTG extends Component {
             });
           }}
         />
-        <button onClick={this.prevPage} disabled={this.state.buttonDisabled}>
-          prev
-        </button>
-        <button onClick={this.nextPage} disabled={this.state.buttonDisabled}>
-          next
-        </button>
-        <Card
+        <CardType
+          cardType={this.state.cardType}
+          handleOnCardChange={this.handleOnCardChange}
+          cardTypes={Stuff.cardTypes}
+        />
+        <FormatType
+          formatType={this.state.formatType}
+          handleOnFormatChange={this.handleOnFormatChange}
+          formatTypes={Stuff.formatTypes}
+        />
+        <div>
+          <button onClick={this.search} disabled={this.state.buttonDisabled}>
+            SEARCH
+          </button>
+        </div>
+        <Cards
           cards={this.state.cards}
           prev={this.prevPage}
           next={this.nextPage}
           page={this.state.pageNumber}
+          orderBy={this.state.orderBy}
+          orderType={this.state.orderType}
         />
       </div>
     );
   }
 }
+
+const main = {
+  display: "flex",
+  flexDirection: "column",
+};
+
 export default MTG;
