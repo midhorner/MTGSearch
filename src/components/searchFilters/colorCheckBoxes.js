@@ -1,4 +1,4 @@
-export const Colors = ({ colorChoices, colorsBool, handleOnChange }) => {
+export const Colors = ({ colorChoices, colorsBool, handleOnColorChange }) => {
   return (
     <ul style={list}>
       {colorChoices.map((color, index) => {
@@ -11,7 +11,7 @@ export const Colors = ({ colorChoices, colorsBool, handleOnChange }) => {
                 name={color}
                 value={color}
                 checked={colorsBool[index]}
-                onChange={() => handleOnChange(index)}
+                onChange={() => handleOnColorChange(index)}
               />
             </li>
             <label htmlFor={`custom-${index}`}>{color}</label>
@@ -30,5 +30,5 @@ const list = {
 };
 
 const item = {
-  padding: "0 1em",
+  padding: "0 2em",
 };

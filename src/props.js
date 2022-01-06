@@ -23,13 +23,6 @@ export const Stuff = {
     "Standard",
     "Vintage",
   ],
-  rarityChoices: [
-    "Common",
-    "Uncommon",
-    "Rare",
-    "Mythic",
-    "Rare",
-    "Special",
-    "Basic+Land",
-  ],
+  landTypeChoices: ["Plains", "Island", "Swamp", "Mountain", "Forest"],
+  rarityChoices: ["Common", "Uncommon", "Rare", "Mythic", "Special"],
 };

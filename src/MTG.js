@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { Cards } from "./components/searchFilters/cards";
 import { CardType } from "./components/searchFilters/cardType";
-import { Colors } from "./components/searchFilters/colors";
+import { Colors } from "./components/searchFilters/colorCheckBoxes";
 import { FormatType } from "./components/searchFilters/formatType";
+import { LandTypes } from "./components/searchFilters/landTypeCheckBoxes";
 import { NameInput } from "./components/searchFilters/nameInput";
+import { Rarities } from "./components/searchFilters/rarityCheckBoxes";
 import { Stuff } from "./props";
 
 class MTG extends Component {
@@ -14,8 +16,9 @@ class MTG extends Component {
       cards: [],
       pageNumber: 1,
       buttonDisabled: false,
-      colorsBool: new Array(Stuff.colorChoices.length).fill(false),
-      raritiesBool: new Array(Stuff.rarityChoices.length).fill(false),
+      colorsBool: this.boolArray(Stuff.colorChoices),
+      landTypesBool: this.boolArray(Stuff.landTypeChoices),
+      raritiesBool: this.boolArray(Stuff.rarityChoices),
       cardType: " ",
       formatType: " ",
       name: "",
@@ -23,6 +26,10 @@ class MTG extends Component {
       orderType: "asc",
     };
   }
+
+  boolArray = (choiceArray) => {
+    return new Array(choiceArray.length).fill(false);
+  };
 
   loadCards = async () => {
     const response = await fetch(
@@ -65,7 +72,19 @@ class MTG extends Component {
     this.setState({ colorsBool: newVals });
   };
 
-  handleOnCardChange = (e) => {
+  handleOnLandTypeChange = (index) => {
+    let newVals = [...this.state.landTypesBool];
+    newVals[index] = !this.state.landTypesBool[index];
+    this.setState({ landTypesBool: newVals });
+  };
+
+  handleOnRarityChange = (index) => {
+    let newVals = [...this.state.raritiesBool];
+    newVals[index] = !this.state.raritiesBool[index];
+    this.setState({ raritiesBool: newVals });
+  };
+
+  handleOnCardTypeChange = (e) => {
     this.setState({ cardType: e.target.value });
     setTimeout(() => {
       console.log(this.state.cardType);
@@ -89,6 +108,26 @@ class MTG extends Component {
         let colorsString = `&colors=${colorsArray.toString()}`;
         this.setState({
           baseUrl: this.state.baseUrl + colorsString,
+        });
+      }
+      const raritiesArray = Stuff.rarityChoices.filter((rarity, index) => {
+        return this.state.raritiesBool[index] === true ? rarity : null;
+      });
+      if (raritiesArray.length !== 0) {
+        let raritiesString = `&rarity=${raritiesArray.toString()}`;
+        this.setState({
+          baseUrl: this.state.baseUrl + raritiesString,
+        });
+      }
+      const landTypesArray = Stuff.landTypeChoices.filter((type, index) => {
+        return this.state.landTypesBool[index] === true ? type : null;
+      });
+      if (landTypesArray.length !== 0) {
+        let landTypesString = `&subtypes=${landTypesArray.toString()}`;
+        landTypesString = landTypesString.split(",").join("|");
+        console.log(landTypesString);
+        this.setState({
+          baseUrl: this.state.baseUrl + landTypesString,
         });
       }
       if (this.state.name.length !== 0) {
@@ -130,7 +169,7 @@ class MTG extends Component {
         <Colors
           colorChoices={Stuff.colorChoices}
           colorsBool={this.state.colorsBool}
-          handleOnChange={this.handleOnColorChange}
+          handleOnColorChange={this.handleOnColorChange}
         />
         <NameInput
           value={this.state.name}
@@ -143,13 +182,24 @@ class MTG extends Component {
         />
         <CardType
           cardType={this.state.cardType}
-          handleOnCardChange={this.handleOnCardChange}
+          handleOnCardTypeChange={this.handleOnCardTypeChange}
           cardTypes={Stuff.cardTypes}
+        />
+        <LandTypes
+          reveal={this.state.cardType}
+          landTypeChoices={Stuff.landTypeChoices}
+          landTypesBool={this.state.landTypesBool}
+          handleOnLandTypeChange={this.handleOnLandTypeChange}
         />
         <FormatType
           formatType={this.state.formatType}
           handleOnFormatChange={this.handleOnFormatChange}
           formatTypes={Stuff.formatTypes}
+        />
+        <Rarities
+          rarityChoices={Stuff.rarityChoices}
+          raritiesBool={this.state.raritiesBool}
+          handleOnRarityChange={this.handleOnRarityChange}
         />
         <div>
           <button onClick={this.search} disabled={this.state.buttonDisabled}>
