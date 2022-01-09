@@ -15,7 +15,7 @@ export const Rarities = ({
                 name={rarity}
                 value={rarity}
                 checked={raritiesBool[index]}
-                onChange={() => handleOnRarityChange(index)}
+                onChange={() => handleOnRarityChange(index, raritiesBool)}
               />
             </li>
             <label htmlFor={`custom-${index}`}>

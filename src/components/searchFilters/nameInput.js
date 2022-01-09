@@ -5,7 +5,7 @@ export const NameInput = (props) => {
         placeholder="Name"
         type="text"
         value={props.value}
-        onChange={props.change}
+        onChange={props.handleOnNameChange}
       />
     </div>
   );

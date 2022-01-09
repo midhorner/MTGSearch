@@ -17,7 +17,7 @@ export const LandTypes = ({
                   name={type}
                   value={type}
                   checked={landTypesBool[index]}
-                  onChange={() => handleOnLandTypeChange(index)}
+                  onChange={() => handleOnLandTypeChange(index, landTypesBool)}
                 />
               </li>
               <label htmlFor={`custom-${index}`}>{type}</label>

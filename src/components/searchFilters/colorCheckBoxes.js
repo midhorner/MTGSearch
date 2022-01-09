@@ -11,7 +11,7 @@ export const Colors = ({ colorChoices, colorsBool, handleOnColorChange }) => {
                 name={color}
                 value={color}
                 checked={colorsBool[index]}
-                onChange={() => handleOnColorChange(index)}
+                onChange={() => handleOnColorChange(index, colorsBool)}
               />
             </li>
             <label htmlFor={`custom-${index}`}>{color}</label>
