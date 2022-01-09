@@ -6,6 +6,7 @@ import { FormatType } from "./components/searchFilters/formatType";
 import { LandTypes } from "./components/searchFilters/landTypeCheckBoxes";
 import { NameInput } from "./components/searchFilters/nameInput";
 import { Rarities } from "./components/searchFilters/rarityCheckBoxes";
+import { arraySearchQuery, selectMenuQuery } from "./helperFunctions";
 import { Stuff } from "./props";
 
 class MTG extends Component {
@@ -39,6 +40,7 @@ class MTG extends Component {
     this.setState({ cards: data.cards });
     setTimeout(() => {
       console.log(`from load function ${this.state.baseUrl}`);
+      console.log(this.state.cards);
       this.setState({ buttonDisabled: false });
     }, 200);
   };
@@ -51,7 +53,7 @@ class MTG extends Component {
     setTimeout(() => {
       this.loadCards();
       console.log(this.state.pageNumber);
-    }, 500);
+    }, 300);
   };
 
   handleBoolArrayChange = (index, boolArray) => {
@@ -61,26 +63,29 @@ class MTG extends Component {
   };
 
   search = () => {
-    this.setState({ buttonDisabled: true, baseUrl: Stuff.baseUrl });
+    this.setState({
+      buttonDisabled: true,
+      baseUrl: Stuff.baseUrl,
+      pageNumber: 1,
+    });
     setTimeout(() => {
-      const colorsArray = Stuff.colorChoices.filter((color, index) => {
-        return this.state.colorsBool[index] === true ? color : null;
+      let baseUrl = this.state.baseUrl;
+      this.setState({
+        baseUrl:
+          baseUrl +
+          arraySearchQuery(
+            Stuff.colorChoices,
+            this.state.colorsBool,
+            "colors"
+          ) +
+          arraySearchQuery(
+            Stuff.rarityChoices,
+            this.state.raritiesBool,
+            "rarity"
+          ) +
+          selectMenuQuery(this.state.cardType, "types") +
+          selectMenuQuery(this.state.formatType, "gameFormat"),
       });
-      if (colorsArray.length !== 0) {
-        let colorsString = `&colors=${colorsArray.toString()}`;
-        this.setState({
-          baseUrl: this.state.baseUrl + colorsString,
-        });
-      }
-      const raritiesArray = Stuff.rarityChoices.filter((rarity, index) => {
-        return this.state.raritiesBool[index] === true ? rarity : null;
-      });
-      if (raritiesArray.length !== 0) {
-        let raritiesString = `&rarity=${raritiesArray.toString()}`;
-        this.setState({
-          baseUrl: this.state.baseUrl + raritiesString,
-        });
-      }
       const landTypesArray = Stuff.landTypeChoices.filter((type, index) => {
         return this.state.landTypesBool[index] === true ? type : null;
       });
@@ -98,23 +103,11 @@ class MTG extends Component {
           baseUrl: this.state.baseUrl + queryName,
         });
       }
-      if (this.state.cardType !== " ") {
-        let queryCardType = `&types=${this.state.cardType}`;
-        this.setState({
-          baseUrl: this.state.baseUrl + queryCardType,
-        });
-      }
-      if (this.state.formatType !== " ") {
-        let queryFormatType = `&gameFormat=${this.state.formatType}`;
-        this.setState({
-          baseUrl: this.state.baseUrl + queryFormatType,
-        });
-      }
     }, 200);
     setTimeout(() => {
       this.loadCards();
       console.log(`from search function ${this.state.baseUrl}`);
-    }, 700);
+    }, 500);
   };
 
   render() {
@@ -144,7 +137,6 @@ class MTG extends Component {
           handleOnNameChange={(e) => {
             this.setState({
               name: e.target.value,
-              pageNumber: 1,
             });
           }}
         />
