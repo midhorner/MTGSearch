@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { Cards } from "./components/searchFilters/cards";
-import { CardType } from "./components/searchFilters/cardType";
-import { Colors } from "./components/searchFilters/colorCheckBoxes";
-import { FormatType } from "./components/searchFilters/formatType";
-import { LandTypes } from "./components/searchFilters/landTypeCheckBoxes";
-import { NameInput } from "./components/searchFilters/nameInput";
-import { Rarities } from "./components/searchFilters/rarityCheckBoxes";
+import {
+  Cards,
+  CardType,
+  Colors,
+  FormatType,
+  LandTypes,
+  NameInput,
+  Rarities,
+} from "./components/searchFilterInputs";
 import { arraySearchQuery, selectMenuQuery } from "./helperFunctions";
 import { Stuff } from "./props";
 
