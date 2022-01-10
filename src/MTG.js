@@ -2,12 +2,11 @@ import React, { Component } from "react";
 import { Cards } from "./components/cards";
 import {
   CardType,
-  Colors,
   FormatType,
   LandTypes,
   NameInput,
-  Rarities,
 } from "./components/searchFilterInputs";
+import { CheckBoxInput } from "./components/tailwindComponents";
 import { arraySearchQuery, selectMenuQuery } from "./helperFunctions";
 import { Stuff } from "./props";
 // import data from "./data.json";
@@ -115,69 +114,76 @@ class MTG extends Component {
 
   render() {
     return (
-      <div className="flex flex-col">
-        <div>
-          <button
-            onClick={() => this.changePage("previous")}
-            disabled={this.state.buttonDisabled}
-          >
-            prev
-          </button>
-          <button
-            onClick={() => this.changePage("next")}
-            disabled={this.state.buttonDisabled}
-          >
-            next
-          </button>
+      <div className="flex flex-wrap">
+        <div className="flex flex-col">
+          <div>
+            <button
+              onClick={() => this.changePage("previous")}
+              disabled={this.state.buttonDisabled}
+            >
+              prev
+            </button>
+            <button
+              onClick={() => this.changePage("next")}
+              disabled={this.state.buttonDisabled}
+            >
+              next
+            </button>
+          </div>
+          <CheckBoxInput
+            id={"Colors"}
+            choiceArray={Stuff.colorChoices}
+            boolArray={this.state.colorsBool}
+            handleOnChange={this.handleBoolArrayChange}
+          />
+          <NameInput
+            value={this.state.name}
+            handleOnNameChange={(e) => {
+              this.setState({
+                name: e.target.value,
+              });
+            }}
+          />
+          <CardType
+            cardType={this.state.cardType}
+            handleOnCardTypeChange={(e) => {
+              this.setState({ cardType: e.target.value });
+            }}
+            cardTypes={Stuff.cardTypes}
+          />
+          <LandTypes
+            reveal={this.state.cardType}
+            id={"Land Types"}
+            choiceArray={Stuff.landTypeChoices}
+            boolArray={this.state.landTypesBool}
+            handleOnChange={this.handleBoolArrayChange}
+          />
+          <FormatType
+            formatType={this.state.formatType}
+            handleOnFormatChange={(e) => {
+              this.setState({ formatType: e.target.value });
+            }}
+            formatTypes={Stuff.formatTypes}
+          />
+          <CheckBoxInput
+            id={"Rarity"}
+            choiceArray={Stuff.rarityChoices}
+            boolArray={this.state.raritiesBool}
+            handleOnChange={this.handleBoolArrayChange}
+          />
+          <div>
+            <button onClick={this.search} disabled={this.state.buttonDisabled}>
+              SEARCH
+            </button>
+          </div>
         </div>
-        <Colors
-          colorChoices={Stuff.colorChoices}
-          colorsBool={this.state.colorsBool}
-          handleOnColorChange={this.handleBoolArrayChange}
-        />
-        <NameInput
-          value={this.state.name}
-          handleOnNameChange={(e) => {
-            this.setState({
-              name: e.target.value,
-            });
-          }}
-        />
-        <CardType
-          cardType={this.state.cardType}
-          handleOnCardTypeChange={(e) => {
-            this.setState({ cardType: e.target.value });
-          }}
-          cardTypes={Stuff.cardTypes}
-        />
-        <LandTypes
-          reveal={this.state.cardType}
-          landTypeChoices={Stuff.landTypeChoices}
-          landTypesBool={this.state.landTypesBool}
-          handleOnLandTypeChange={this.handleBoolArrayChange}
-        />
-        <FormatType
-          formatType={this.state.formatType}
-          handleOnFormatChange={(e) => {
-            this.setState({ formatType: e.target.value });
-          }}
-          formatTypes={Stuff.formatTypes}
-        />
-        <Rarities
-          rarityChoices={Stuff.rarityChoices}
-          raritiesBool={this.state.raritiesBool}
-          handleOnRarityChange={this.handleBoolArrayChange}
-        />
-        <div>
-          <button onClick={this.search} disabled={this.state.buttonDisabled}>
-            SEARCH
-          </button>
+        <div className="pl-10">
+          <Cards
+            cards={this.state.cards}
+            orderBy={this.state.orderBy}
+            orderType={this.state.orderType}
+          />
         </div>
-        <Cards
-          cards={this.state.cards}
-          orderBy={this.state.orderBy}
-          orderType={this.state.orderType}
-        />
       </div>
     );
   }

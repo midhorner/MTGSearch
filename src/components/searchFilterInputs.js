@@ -1,3 +1,5 @@
+import { CheckBoxInput } from "./tailwindComponents";
+
 export const CardType = (props) => {
   return (
     <div>
@@ -73,40 +75,15 @@ export const FormatType = (props) => {
   );
 };
 
-export const LandTypes = ({
-  reveal,
-  landTypeChoices,
-  landTypesBool,
-  handleOnLandTypeChange,
-}) => {
-  if (reveal === "Land") {
+export const LandTypes = (props) => {
+  if (props.reveal === "Land") {
     return (
-      <div>
-        <div>
-          <label htmlFor="landType">Land Type</label>
-        </div>
-        <ul id="landType">
-          {landTypeChoices.map((type, index) => {
-            return (
-              <div key={index}>
-                <li>
-                  <input
-                    type="checkbox"
-                    id={`custom-${index}`}
-                    name={type}
-                    value={type}
-                    checked={landTypesBool[index]}
-                    onChange={() =>
-                      handleOnLandTypeChange(index, landTypesBool)
-                    }
-                  />
-                </li>
-                <label htmlFor={`custom-${index}`}>{type}</label>
-              </div>
-            );
-          })}
-        </ul>
-      </div>
+      <CheckBoxInput
+        id={props.id}
+        choiceArray={props.choiceArray}
+        boolArray={props.boolArray}
+        handleOnChange={props.handleOnChange}
+      />
     );
   }
   return <></>;

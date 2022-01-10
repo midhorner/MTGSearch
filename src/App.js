@@ -2,7 +2,7 @@ import MTG from "./MTG";
 
 function App() {
   return (
-    <div className="App text-center">
+    <div className="App p-5">
       <MTG />
     </div>
   );

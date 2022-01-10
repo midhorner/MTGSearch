@@ -22,10 +22,13 @@ export const Cards = (props) => {
   );
   const displayCards = sortedCards.map((card, i) => {
     return (
-      <div key={i}>
-        <div className="text-lg">{card.name}</div>
-        <div>{card.setName}</div>
-        <img src={card.imageUrl} alt={card.name} />
+      <div key={i} className="flex-row py-2 max-w-4xl">
+        <img src={card.imageUrl} alt={card.name} className="w-40" />
+        <div className="pl-4">
+          <div className="text-lg">{card.name}</div>
+          <div>{card.setName}</div>
+          <p>{card.text}</p>
+        </div>
       </div>
     );
   });
