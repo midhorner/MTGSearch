@@ -1,6 +1,6 @@
 export const Stuff = {
   baseUrl: "https://api.magicthegathering.io/v1/cards?contains=imageUrl",
-  colorChoices: ["white", "blue", "black", "red", "green"],
+
   cardTypes: [
     " ",
     "Instant",
@@ -11,6 +11,8 @@ export const Stuff = {
     "Land",
     "Planeswalker",
   ],
+  colorChoices: ["white", "blue", "black", "red", "green"],
+  colorIdentity: ["B", "G", "R", "U", "W"],
   formatTypes: [
     " ",
     "Brawl",

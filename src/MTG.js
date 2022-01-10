@@ -10,6 +10,7 @@ import {
 } from "./components/searchFilterInputs";
 import { arraySearchQuery, selectMenuQuery } from "./helperFunctions";
 import { Stuff } from "./props";
+// import data from "./data.json";
 
 class MTG extends Component {
   constructor(props) {
@@ -61,7 +62,7 @@ class MTG extends Component {
   handleBoolArrayChange = (index, boolArray) => {
     let newVals = boolArray;
     newVals[index] = !boolArray[index];
-    this.setState({ boolArray: newVals });
+    this.setState({ [boolArray]: newVals });
   };
 
   search = () => {
