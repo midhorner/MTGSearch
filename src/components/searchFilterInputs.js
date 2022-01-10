@@ -1,40 +1,6 @@
-export const Cards = (props) => {
-  const compareValues = (key, order) => {
-    return function innersort(a, b) {
-      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-        return 0;
-      }
-
-      const varA = typeof a[key] === "string" ? a[key].toLowerCase() : a[key];
-      const varB = typeof b[key] === "string" ? b[key].toLowerCase() : b[key];
-
-      let comparison = 0;
-      if (varA > varB) {
-        comparison = 1;
-      } else if (varA < varB) {
-        comparison = -1;
-      }
-      return order === "desc" ? comparison * -1 : comparison;
-    };
-  };
-  const sortedCards = props.cards.sort(
-    compareValues(props.orderBy, props.orderType)
-  );
-  const displayCards = sortedCards.map((card, i) => {
-    return (
-      <div key={i}>
-        <h1>{card.name}</h1>
-        <h3>{card.setName}</h3>
-        <img src={card.imageUrl} alt={card.name} />
-      </div>
-    );
-  });
-  return <div>{displayCards}</div>;
-};
-
 export const CardType = (props) => {
   return (
-    <div style={comp}>
+    <div>
       <div>
         <label htmlFor="cardType">Card Types</label>
       </div>
@@ -57,15 +23,15 @@ export const CardType = (props) => {
 
 export const Colors = ({ colorChoices, colorsBool, handleOnColorChange }) => {
   return (
-    <div style={comp}>
+    <div>
       <div>
         <label htmlFor="colorChoices">Colors</label>
       </div>
-      <ul id="colorChoices" style={list}>
+      <ul id="colorChoices" className="inline-flex">
         {colorChoices.map((color, index) => {
           return (
             <div key={index}>
-              <li style={item}>
+              <li>
                 <input
                   type="checkbox"
                   id={`custom-${index}`}
@@ -86,7 +52,7 @@ export const Colors = ({ colorChoices, colorsBool, handleOnColorChange }) => {
 
 export const FormatType = (props) => {
   return (
-    <div style={comp}>
+    <div>
       <div>
         <label htmlFor="formatType">Format</label>
       </div>
@@ -115,15 +81,15 @@ export const LandTypes = ({
 }) => {
   if (reveal === "Land") {
     return (
-      <div style={comp}>
+      <div>
         <div>
           <label htmlFor="landType">Land Type</label>
         </div>
-        <ul id="landType" style={list}>
+        <ul id="landType">
           {landTypeChoices.map((type, index) => {
             return (
               <div key={index}>
-                <li style={item}>
+                <li>
                   <input
                     type="checkbox"
                     id={`custom-${index}`}
@@ -148,7 +114,7 @@ export const LandTypes = ({
 
 export const NameInput = (props) => {
   return (
-    <div style={comp}>
+    <div>
       <div>
         <label htmlFor="name">Card Name</label>
       </div>
@@ -169,15 +135,15 @@ export const Rarities = ({
   handleOnRarityChange,
 }) => {
   return (
-    <div style={comp}>
+    <div>
       <div>
         <label htmlFor="rarity">Rarity</label>
       </div>
-      <ul id="rarity" style={list}>
+      <ul id="rarity">
         {rarityChoices.map((rarity, index) => {
           return (
             <div key={index}>
-              <li style={item}>
+              <li>
                 <input
                   type="checkbox"
                   id={`custom-${index}`}
@@ -196,19 +162,4 @@ export const Rarities = ({
       </ul>
     </div>
   );
-};
-
-const list = {
-  display: "inline-flex",
-  listStyle: "none",
-  margin: "auto",
-  padding: 0,
-};
-
-const item = {
-  padding: "0 2em",
-};
-
-const comp = {
-  padding: "1em 0",
 };

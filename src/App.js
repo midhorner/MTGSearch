@@ -1,9 +1,8 @@
-import "./App.css";
 import MTG from "./MTG";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App text-center">
       <MTG />
     </div>
   );

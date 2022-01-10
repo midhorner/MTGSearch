@@ -1,6 +1,6 @@
 import React, { Component } from "react";
+import { Cards } from "./components/cards";
 import {
-  Cards,
   CardType,
   Colors,
   FormatType,
@@ -115,7 +115,7 @@ class MTG extends Component {
 
   render() {
     return (
-      <div style={main}>
+      <div className="flex flex-col">
         <div>
           <button
             onClick={() => this.changePage("previous")}
@@ -182,10 +182,5 @@ class MTG extends Component {
     );
   }
 }
-
-const main = {
-  display: "flex",
-  flexDirection: "column",
-};
 
 export default MTG;
